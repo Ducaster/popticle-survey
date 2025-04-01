@@ -1,4 +1,4 @@
-// ✅ app/components/Result.tsx (애니메이션 추가)
+// ✅ app/components/Result.tsx (계속 버튼으로 연결)
 "use client";
 
 import Image from "next/image";
@@ -7,11 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Result({
   label,
   image,
-  onRestart,
+  onContinue,
 }: {
   label: string;
   image: string;
-  onRestart: () => void;
+  onContinue: () => void;
 }) {
   return (
     <AnimatePresence>
@@ -37,9 +37,9 @@ export default function Result({
           </p>
           <button
             className="mt-4 bg-[#f4e14c] text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-300"
-            onClick={onRestart}
+            onClick={onContinue}
           >
-            다시하기
+            계속
           </button>
         </div>
       </motion.div>

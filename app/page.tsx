@@ -1,10 +1,11 @@
-// ✅ app/page.tsx (Result 컴포넌트로 전환 렌더)
+// ✅ app/page.tsx (로고 크기 축소 & 버튼 위치 조정)
 "use client";
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Result from "./components/Result";
+import FollowUp from "./components/FollowUp"; // 경로 맞게 조정
 
 const quizData: Record<string, any> = {
   romance: {
@@ -63,6 +64,7 @@ export default function QuizPage() {
   const [topic, setTopic] = useState<string>("");
   const [q1, setQ1] = useState<number | null>(null);
   const [q2, setQ2] = useState<number | null>(null);
+  const [showFollowUp, setShowFollowUp] = useState(false);
 
   const quiz = topic ? quizData[topic] : null;
   const result = q1 && q2 ? enneagramMap[`${q1}-${q2}`] : null;
@@ -85,7 +87,7 @@ export default function QuizPage() {
   return (
     <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4 relative overflow-hidden">
       <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
-        <Image src="/logo.png" alt="logo" width={100} height={30} />
+        <Image src="/logo.svg" alt="logo" width={80} height={24} />
         <nav className="text-sm text-gray-400">POPTICLE</nav>
       </header>
 
@@ -97,22 +99,22 @@ export default function QuizPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-md text-center mt-10"
+            className="w-full max-w-md text-center mt-4"
           >
             <Image
               src="/logo_character.png"
               alt="logo character"
-              width={180}
-              height={180}
-              className="mx-auto mb-6"
+              width={160}
+              height={160}
+              className="mx-auto mb-4"
             />
-            <h1 className="text-2xl font-extrabold text-white mb-3">
+            <h1 className="text-2xl font-extrabold text-white mb-2">
               📌 에니어그램 유형 분석
             </h1>
-            <p className="mb-6 text-sm text-gray-400">
+            <p className="mb-4 text-sm text-gray-400">
               🎯 STEP 1. 관심 있는 주제를 선택하세요!
             </p>
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {Object.entries(quizData).map(([key, q]) => (
                 <button
                   key={key}
@@ -156,17 +158,16 @@ export default function QuizPage() {
         )}
       </AnimatePresence>
 
-      {step === 3 && result && (
+      {step === 3 && result && !showFollowUp && (
         <Result
           label={result.label}
           image={result.image}
-          onRestart={() => {
-            setStep(0);
-            setTopic("");
-            setQ1(null);
-            setQ2(null);
-          }}
+          onContinue={() => setShowFollowUp(true)} // ✅ 상태 변경
         />
+      )}
+
+      {showFollowUp && (
+        <FollowUp /> // 컴포넌트 만들어 두었다면 import 필요
       )}
     </div>
   );
