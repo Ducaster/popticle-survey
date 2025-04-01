@@ -1,103 +1,196 @@
+// ✅ app/page.tsx (네비게이션 + 로고 + 결과 이미지)
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+const quizData: Record<string, any> = {
+  romance: {
+    title: "연애 ❤️",
+    q1: "연애를 시작할 때 나는?",
+    options1: [
+      "내가 먼저 다가간다",
+      "천천히 접근한다",
+      "누군가 다가와야 시작한다",
+    ],
+    q2: "연애 중 갈등이 생기면 나는?",
+    options2: [
+      "논리적으로 해결한다",
+      "감정을 솔직히 표현한다",
+      "갈등을 피한다",
+    ],
+  },
+  social: {
+    title: "인간관계 👥",
+    q1: "처음 만난 사람과 대화할 때 나는?",
+    options1: [
+      "내가 먼저 말을 건다",
+      "상대 말을 듣고 반응한다",
+      "조용히 관찰한다",
+    ],
+    q2: "친구와 갈등이 생기면 나는?",
+    options2: ["솔직히 말한다", "감정을 고려해 대화한다", "피하거나 기다린다"],
+  },
+  career: {
+    title: "진로(취업) 💼",
+    q1: "미래를 계획할 때 나는?",
+    options1: [
+      "목표를 세우고 실행한다",
+      "여러 가능성을 고민한다",
+      "편한 길을 찾는다",
+    ],
+    q2: "문제가 생기면 나는?",
+    options2: ["즉시 해결책을 찾는다", "감정을 조절하며 대응", "흐름에 맡긴다"],
+  },
+};
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+const enneagramMap: Record<string, { label: string; image: string }> = {
+  "1-1": { label: "3번 (성취자)", image: "/result/3.png" },
+  "1-2": { label: "2번 (조력자)", image: "/result/2.png" },
+  "1-3": { label: "4번 (예술가)", image: "/result/4.png" },
+  "2-1": { label: "5번 (탐구자)", image: "/result/5.png" },
+  "2-2": { label: "6번 (회의주의자)", image: "/result/6.png" },
+  "2-3": { label: "7번 (낙천가)", image: "/result/7.png" },
+  "3-1": { label: "1번 (완벽주의자)", image: "/result/1.png" },
+  "3-2": { label: "8번 (도전자)", image: "/result/8.png" },
+  "3-3": { label: "9번 (평화주의자)", image: "/result/9.png" },
+};
+
+export default function QuizPage() {
+  const router = useRouter();
+  const [step, setStep] = useState(0);
+  const [topic, setTopic] = useState<string>("");
+  const [q1, setQ1] = useState<number | null>(null);
+  const [q2, setQ2] = useState<number | null>(null);
+
+  const handleTopic = (value: string) => {
+    setTopic(value);
+    setStep(1);
+  };
+
+  const handleAnswer = (index: number) => {
+    if (step === 1) {
+      setQ1(index + 1);
+      setStep(2);
+    } else if (step === 2) {
+      setQ2(index + 1);
+      setStep(3);
+    }
+  };
+
+  const result = q1 && q2 ? enneagramMap[`${q1}-${q2}`] : null;
+  const quiz = topic ? quizData[topic] : null;
+
+  return (
+    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4">
+      {/* Navigation */}
+      <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
+        <Image src="/logo.svg" alt="logo" width={100} height={30} />
+        <nav className="text-sm text-gray-400">POPTICLE</nav>
+      </header>
+
+      <AnimatePresence mode="wait">
+        {step === 0 && (
+          <motion.div
+            key="topics"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-full max-w-md text-center mt-10"
           >
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/logo_character.png"
+              alt="logo character"
+              width={180}
+              height={180}
+              className="mx-auto mb-6"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h1 className="text-2xl font-extrabold text-white mb-3">
+              📌 에니어그램 유형 분석
+            </h1>
+            <p className="mb-6 text-sm text-gray-400">
+              🎯 STEP 1. 관심 있는 주제를 선택하세요!
+            </p>
+            <div className="grid gap-4">
+              {Object.entries(quizData).map(([key, q]) => (
+                <button
+                  key={key}
+                  onClick={() => handleTopic(key)}
+                  className="bg-[#e25a6e] text-white py-3 rounded-full shadow-md hover:brightness-110 transition"
+                >
+                  {q.title}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {step > 0 && step < 3 && quiz && (
+          <motion.div
+            key={`question-${step}`}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-md bg-[#1a1a26] shadow-xl rounded-3xl p-8 text-center mt-8"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="mb-4 text-sm text-gray-400">STEP {step + 1}/3</div>
+            <h2 className="text-lg font-semibold mb-6 text-white">
+              {step === 1 ? quiz.q1 : quiz.q2}
+            </h2>
+            <div className="flex flex-col gap-4">
+              {(step === 1 ? quiz.options1 : quiz.options2).map(
+                (opt: string, i: number) => (
+                  <button
+                    key={i}
+                    className="bg-[#e25a6e] text-white py-3 rounded-full shadow-md hover:scale-105 transition"
+                    onClick={() => handleAnswer(i)}
+                  >
+                    {opt}
+                  </button>
+                )
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {step === 3 && result && (
+          <motion.div
+            key="result"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#1a1a26] text-white p-8 rounded-2xl text-center max-w-md shadow-lg mt-8"
+          >
+            <Image
+              src={result.image}
+              alt={result.label}
+              width={160}
+              height={160}
+              className="mx-auto mb-4"
+            />
+            <h1 className="text-3xl font-bold mb-2 text-[#f4e14c]">
+              {result.label}
+            </h1>
+            <p className="text-sm text-gray-300 mb-4">
+              당신의 에니어그램 성향입니다.
+            </p>
+            <button
+              className="mt-4 bg-[#f4e14c] text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-300"
+              onClick={() => {
+                setStep(0);
+                setTopic("");
+                setQ1(null);
+                setQ2(null);
+              }}
+            >
+              다시하기
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
