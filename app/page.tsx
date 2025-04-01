@@ -1,10 +1,10 @@
-// ✅ app/page.tsx (네비게이션 + 로고 + 결과 이미지)
+// ✅ app/page.tsx (Result 컴포넌트로 전환 렌더)
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Result from "./components/Result";
 
 const quizData: Record<string, any> = {
   romance: {
@@ -59,11 +59,13 @@ const enneagramMap: Record<string, { label: string; image: string }> = {
 };
 
 export default function QuizPage() {
-  const router = useRouter();
   const [step, setStep] = useState(0);
   const [topic, setTopic] = useState<string>("");
   const [q1, setQ1] = useState<number | null>(null);
   const [q2, setQ2] = useState<number | null>(null);
+
+  const quiz = topic ? quizData[topic] : null;
+  const result = q1 && q2 ? enneagramMap[`${q1}-${q2}`] : null;
 
   const handleTopic = (value: string) => {
     setTopic(value);
@@ -80,12 +82,8 @@ export default function QuizPage() {
     }
   };
 
-  const result = q1 && q2 ? enneagramMap[`${q1}-${q2}`] : null;
-  const quiz = topic ? quizData[topic] : null;
-
   return (
-    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4">
-      {/* Navigation */}
+    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4 relative overflow-hidden">
       <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
         <Image src="/logo.svg" alt="logo" width={100} height={30} />
         <nav className="text-sm text-gray-400">POPTICLE</nav>
@@ -156,41 +154,20 @@ export default function QuizPage() {
             </div>
           </motion.div>
         )}
-
-        {step === 3 && result && (
-          <motion.div
-            key="result"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-[#1a1a26] text-white p-8 rounded-2xl text-center max-w-md shadow-lg mt-8"
-          >
-            <Image
-              src={result.image}
-              alt={result.label}
-              width={160}
-              height={160}
-              className="mx-auto mb-4"
-            />
-            <h1 className="text-3xl font-bold mb-2 text-[#f4e14c]">
-              {result.label}
-            </h1>
-            <p className="text-sm text-gray-300 mb-4">
-              당신의 에니어그램 성향입니다.
-            </p>
-            <button
-              className="mt-4 bg-[#f4e14c] text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-300"
-              onClick={() => {
-                setStep(0);
-                setTopic("");
-                setQ1(null);
-                setQ2(null);
-              }}
-            >
-              다시하기
-            </button>
-          </motion.div>
-        )}
       </AnimatePresence>
+
+      {step === 3 && result && (
+        <Result
+          label={result.label}
+          image={result.image}
+          onRestart={() => {
+            setStep(0);
+            setTopic("");
+            setQ1(null);
+            setQ2(null);
+          }}
+        />
+      )}
     </div>
   );
 }
