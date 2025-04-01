@@ -85,7 +85,7 @@ export default function QuizPage() {
   return (
     <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4 relative overflow-hidden">
       <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
-        <Image src="/logo.svg" alt="logo" width={100} height={30} />
+        <Image src="/logo.png" alt="logo" width={100} height={30} />
         <nav className="text-sm text-gray-400">POPTICLE</nav>
       </header>
 
