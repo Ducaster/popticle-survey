@@ -1,0 +1,7 @@
+component: "@sls-next/serverless-component@latest"
+
+name: nextjs-app
+inputs:
+  domain:
+    - popticle.kr
+  bucketName: nextjs-app-static-assets
