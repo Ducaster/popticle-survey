@@ -1,4 +1,4 @@
-// ✅ app/components/Result.tsx (계속 버튼으로 연결)
+// ✅ app/components/Result.tsx (계속 버튼으로 설명 컴포넌트로 연결)
 "use client";
 
 import Image from "next/image";
@@ -7,11 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Result({
   label,
   image,
-  onContinue,
+  description,
+  onNextStep,
 }: {
   label: string;
   image: string;
-  onContinue: () => void;
+  description: string;
+  onNextStep: () => void;
 }) {
   return (
     <AnimatePresence>
@@ -32,14 +34,12 @@ export default function Result({
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold mb-2 text-[#f4e14c]">{label}</h1>
-          <p className="text-sm text-gray-300 mb-4">
-            당신의 에니어그램 성향입니다.
-          </p>
+          <p className="text-sm text-gray-300 mb-4">{description}</p>
           <button
             className="mt-4 bg-[#f4e14c] text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-300"
-            onClick={onContinue}
+            onClick={onNextStep}
           >
-            계속
+            다음
           </button>
         </div>
       </motion.div>

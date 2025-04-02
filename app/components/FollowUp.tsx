@@ -14,6 +14,7 @@ export default function FollowUp() {
     location: "",
     availability: "",
     contact: "",
+    source: "",
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -31,7 +32,7 @@ export default function FollowUp() {
 
     try {
       const query = new URLSearchParams(form).toString();
-      const url = `https://script.google.com/macros/s/AKfycbwUSXVFtC79Y_buKOcAleRTaIxiR0iq01hMOzcSvBJBUoWyz6nZfLEBkQpokDN58wKTYA/exec?${query}`;
+      const url = `https://script.google.com/macros/s/AKfycbxnVhhCtxKrT8VlgDNteDuCMxaKqumIP4bzSr3CX1Hl2qAvTCYKZ-Msd0dZ8I-yDCKzNQ/exec?${query}`;
 
       const res = await fetch(url);
 
@@ -47,6 +48,7 @@ export default function FollowUp() {
           location: "",
           availability: "",
           contact: "",
+          source: "",
         });
       } else {
         alert("제출에 실패했어요 😢 다시 시도해주세요.");
@@ -60,16 +62,16 @@ export default function FollowUp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-4 pt-16 relative">
+    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-4 pt-4 relative">
       <Image
-        src="/next_step.png"
+        src="/popticle_qr.jpg"
         alt="next"
-        width={180}
-        height={180}
+        width={300}
+        height={300}
         className="mb-4"
       />
       <h2 className="text-xl font-semibold mb-6 text-center">
-        당신의 이야기를 더 들려주세요
+        스프링:미 신청하기
       </h2>
       <form className="w-full max-w-md space-y-4" onSubmit={handleSubmit}>
         {["name", "age", "location", "availability", "contact"].map((field) => (
@@ -83,7 +85,7 @@ export default function FollowUp() {
                 age: "나이",
                 location: "사는 곳",
                 availability: "가능한 요일과 시간",
-                contact: "연락처 (카카오톡/전화 등)",
+                contact: "연락처 (핸드폰/카카오톡/인스타 등)",
               }[field]
             }
             value={form[field as keyof typeof form]}
@@ -92,6 +94,18 @@ export default function FollowUp() {
             required
           />
         ))}
+
+        {/* ✅ 신청 경로 (자유 입력창) */}
+        <input
+          name="source"
+          type="text"
+          placeholder="신청 경로 (선택사항)"
+          value={form.source}
+          onChange={handleChange}
+          className="w-full px-4 py-3 rounded-lg text-black focus:outline-none"
+          required
+        />
+
         <button
           type="submit"
           className="mt-2 bg-[#f4e14c] text-black font-semibold py-3 px-6 rounded-full hover:bg-yellow-300 w-full disabled:opacity-60"
@@ -113,7 +127,7 @@ export default function FollowUp() {
           >
             <div className="bg-[#1a1a26] p-6 rounded-2xl max-w-sm w-full text-center">
               <Image
-                src="/popticle_qr.jpg"
+                src="/PopV.png"
                 alt="success"
                 width={300}
                 height={300}
