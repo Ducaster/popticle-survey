@@ -5,7 +5,13 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-export default function FollowUp() {
+export default function FollowUp({
+  topic,
+  resultType,
+}: {
+  topic: string;
+  resultType: string;
+}) {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -28,17 +34,19 @@ export default function FollowUp() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // ✅ 빈값일 때 기본값 설정
+    // ✅ 빈값일 때 기본값 설정 및 관심사, 결과 추가
     const filledForm = {
       ...form,
       source: form.source.trim() === "" ? "미입력" : form.source.trim(),
+      topic,
+      resultType,
     };
 
     console.log("📤 제출할 데이터:", filledForm);
 
     try {
       const query = new URLSearchParams(filledForm).toString();
-      const url = `https://script.google.com/macros/s/AKfycbxnVhhCtxKrT8VlgDNteDuCMxaKqumIP4bzSr3CX1Hl2qAvTCYKZ-Msd0dZ8I-yDCKzNQ/exec?${query}`;
+      const url = `https://script.google.com/macros/s/AKfycbxUdCaevQf80UZqlqHaiR92pVGkzT5PTSPuKNL4MVICLEQNSl9YFxNEbQdG6MKfNrG3/exec?${query}`;
 
       const res = await fetch(url);
 

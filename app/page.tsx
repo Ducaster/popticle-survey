@@ -229,6 +229,12 @@ export default function QuizPage() {
     }
   };
 
+  const topicTitleMap = {
+    romance: "연애",
+    social: "인간관계",
+    career: "진로(취업)",
+  };
+
   return (
     <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-4 sm:px-6 py-4 relative overflow-hidden">
       <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
@@ -332,7 +338,12 @@ export default function QuizPage() {
         <ResultExplain onContinue={() => setShowFollowUp(true)} />
       )}
 
-      {showFollowUp && <FollowUp />}
+      {showFollowUp && (
+        <FollowUp
+          topic={topicTitleMap[topic as keyof typeof topicTitleMap] || topic}
+          resultType={result.label}
+        />
+      )}
     </div>
   );
 }
