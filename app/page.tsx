@@ -230,12 +230,12 @@ export default function QuizPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-6 py-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0c0c15] text-white flex flex-col items-center px-4 sm:px-6 py-4 relative overflow-hidden">
       <header className="w-full max-w-4xl flex justify-between items-center py-4 px-2">
         <Image
           src="/logo.png"
           alt="logo"
-          width={80}
+          width={50}
           height={24}
           className="cursor-pointer"
           onClick={() => window.location.reload()}
@@ -251,16 +251,16 @@ export default function QuizPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-md text-center mt-4"
+            className="w-full max-w-md sm:max-w-lg text-center mt-4"
           >
             <Image
               src="/logo_character.png"
               alt="logo character"
-              width={160}
-              height={160}
+              width={150}
+              height={150}
               className="mx-auto mb-4"
             />
-            <h1 className="text-2xl font-extrabold text-white mb-2">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white mb-2">
               📌 애니어그램 유형 분석
             </h1>
             <p className="mb-4 text-sm text-gray-400">
@@ -271,7 +271,7 @@ export default function QuizPage() {
                 <button
                   key={key}
                   onClick={() => handleTopic(key as TopicKey)}
-                  className="bg-[#e25a6e] text-white py-3 rounded-full shadow-md hover:brightness-110 transition"
+                  className="bg-[#e25a6e] text-white py-3 rounded-full shadow-md hover:brightness-110 transition text-sm sm:text-base"
                 >
                   {q.title}
                 </button>
@@ -287,19 +287,19 @@ export default function QuizPage() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="w-full max-w-md bg-[#1a1a26] shadow-xl rounded-3xl p-8 text-center mt-8"
+            className="w-full max-w-md sm:max-w-lg bg-[#1a1a26] shadow-xl rounded-3xl p-6 sm:p-8 text-center mt-8"
           >
             <div className="mb-4 text-sm text-gray-400">
               STEP {step}/{quiz.questions.length}
             </div>
-            <h2 className="text-lg font-semibold mb-6 text-white">
+            <h2 className="text-base sm:text-lg font-semibold mb-6 text-white break-words">
               {quiz.questions[step - 1].question}
             </h2>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:gap-4">
               {quiz.questions[step - 1].options.map((opt, i) => (
                 <button
                   key={i}
-                  className="bg-[#e25a6e] text-white py-3 rounded-full shadow-md hover:scale-105 transition"
+                  className="bg-[#e25a6e] text-white text-sm sm:text-base py-2 sm:py-3 rounded-full shadow-md hover:scale-105 transition break-words"
                   onClick={() => handleAnswer(opt)}
                 >
                   {opt.text}
