@@ -28,10 +28,16 @@ export default function FollowUp() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("📤 제출할 데이터:", form);
+    // ✅ 빈값일 때 기본값 설정
+    const filledForm = {
+      ...form,
+      source: form.source.trim() === "" ? "미입력" : form.source.trim(),
+    };
+
+    console.log("📤 제출할 데이터:", filledForm);
 
     try {
-      const query = new URLSearchParams(form).toString();
+      const query = new URLSearchParams(filledForm).toString();
       const url = `https://script.google.com/macros/s/AKfycbxnVhhCtxKrT8VlgDNteDuCMxaKqumIP4bzSr3CX1Hl2qAvTCYKZ-Msd0dZ8I-yDCKzNQ/exec?${query}`;
 
       const res = await fetch(url);
@@ -103,7 +109,6 @@ export default function FollowUp() {
           value={form.source}
           onChange={handleChange}
           className="w-full px-4 py-3 rounded-lg text-black focus:outline-none"
-          required
         />
 
         <button

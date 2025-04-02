@@ -1,0 +1,8 @@
+component: "@sls-next/serverless-component@1.18.0"
+name: popticle-survey
+
+inputs:
+  domain: "popticle.kr" # 연결할 도메인 (선택 사항)
+  bucketName: "popticle-survey-bucket"
+  memory: 512 # Lambda 메모리 설정
+  timeout: 10 # Lambda 타임아웃 설정
