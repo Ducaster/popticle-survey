@@ -33,8 +33,8 @@ export default function ResultExplain({
             <p className="text-sm sm:text-base text-gray-300 mb-6 whitespace-pre-line break-words">
               🔸3단계에 걸친 구체화된 커리큘럼으로 실질적인 해결책을 제시합니다!
               <br></br>
-              🔸협업 기간(4/1~4/13) 동안 참여해주신 분들께는 무료 퍼스널브랜딩의
-              기회를 제공드립니다!
+              🔸협업 기간(4/18~5/18) 동안 참여해주신 분들께는 무료
+              퍼스널브랜딩의 기회를 제공드립니다!
             </p>
             <button
               onClick={onContinue}
